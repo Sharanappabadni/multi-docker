@@ -1,0 +1,23 @@
+sudo: required
+
+services:
+  - docker
+
+before install:
+  - docker build -t sharanbadni/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true sharanbadni/react-test npm test
+
+after success:
+  - docker build -t sharanbadni/multi-client ./client
+  - docker build -t sharanbadni/multi-nginx ./nginx
+  - docker build -t sharanbadni/multi-server ./server
+  - docker build -t sharanbadni/multi-worker ./worker
+  # Login into the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them into docker hub
+  - docker push sharanbadni/multi-client
+  - docker push sharanbadni/multi-nginx
+  - docker push sharanbadni/multi-server
+  - docker push sharanbadni/multi-worker
