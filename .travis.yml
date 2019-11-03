@@ -14,7 +14,7 @@ after_success:
   - docker build -t sharanbadni/multi-nginx ./nginx
   - docker build -t sharanbadni/multi-server ./server
   - docker build -t sharanbadni/multi-worker ./worker
-  # Login into the docker CLI
+  # Login into the docker CLI 
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them into docker hub
   - docker push sharanbadni/multi-client
